@@ -1,83 +1,75 @@
 #!/bin/bash
 
-# Configuration MQTT
+# MQTT Configuration
 BROKER="mqtt.iut-blagnac.fr"
-TOPIC1="AM107/by-room/E101/data"
-TOPIC2="AM107/by-room/B101/data"
-TOPIC3="AM107/by-room/E102/data"
-TOPIC4="AM107/by-room/B111/data"
+TOPIC1="AM107/by-room/E102/data"
+TOPIC2="AM107/by-room/B111/data"
+TOPIC3="AM107/by-room/E103/data"
+TOPIC4="AM107/by-room/B112/data"
 
-# Configuration MySQL (via PHPMyAdmin)
-DB_HOST="localhost"       # Adresse du serveur MySQL
-DB_USER="root"    # Nom d'utilisateur de la base de données
-DB_PASSWORD="22207448"
-TABLE_NAME="sae23" # Nom de la table
+# Connection Variables
+DB_HOST="localhost"
+DB_USER="root"
+DB_PASS="22207448"
+DB_NAME="sae23"
 
-# Fonction pour insérer les données dans MySQL
+# Function to insert data into MySQL
 insertion_bd() {
     query="$1"
-	echo "$query" | sudo /opt/lampp/bin/mysql -u "$DB_USER" -p"$DB_PASSWORD" "$TABLE_NAME"
+	echo ""
+    echo "Executing query: $query"  # Imprime la requête avant l'exécution
+	echo ""
+	echo "------------------------------------------"
+	echo ""
+    echo "$query" | sudo /opt/lampp/bin/mysql -u "$DB_USER" -p"$DB_PASS" "$DB_NAME"
+
 }
 
-#Fonction pour extraire les données de temperature et nom du capteur
+# Extracting temperature with jq
 extraire() {
-
-# Extraction de la température avec jq
-    temperature=$(echo $1 | jq -r '.[0].temperature')
+    # Extraction de la température avec jq
+    temperature=$(echo "$1" | jq -r '.[0].temperature')
+	echo "------------------------------------------"
+	echo ""
     echo "temperature : $temperature"
 
-# Extraire le device name avec jq
-    device_name=$(echo $1 | jq -r '.[1].deviceName')
-    echo "nom de capteur : $device_name"
+    #Extract the device name with jq
+    device_name=$(echo "$1" | jq -r '.[1].deviceName')
+    echo "device name : $device_name"
 	
-	current_date=$(date +"%Y-%m-%d")
-	current_time=$(date +"%H:%M")
+    current_date=$(date +'%Y-%m-%d')
+    current_time=$(date +'%H:%M:%S')
 	
-	query="INSERT INTO mesure (date_mesure, horaire, valeur, nom) VALUES ('$current_date', '$current_time', $temperature, '$device_name');"
-	insertion_bd "$query"
+    # Build the insert query and call the function to perform the insertion
+    query="INSERT INTO mesure (date_mesure, horaire, valeur, nom_capteur) VALUES ('$current_date', '$current_time', $temperature, '$device_name');"
+    insertion_bd "$query"
 }
 
-recuperation_complete() {
-recuperation_E208
-recuperation_B101
-recuperation_E207
-recuperation_B111
+# MQTT subscription function and processing of received messages
+mqtt_subscribe() {
+    # Subscribe to the first MQTT broker
+    mosquitto_sub -h $BROKER -t $TOPIC1 | while read -r message; do
+        extraire "$message"
+    done &
+
+    # Subscribe to the second MQTT broker
+    mosquitto_sub -h $BROKER -t $TOPIC2 | while read -r message; do
+        extraire "$message"
+    done &
+
+    # Subscribe to the third MQTT broker
+    mosquitto_sub -h $BROKER -t $TOPIC3 | while read -r message; do
+        extraire "$message"
+    done &
+
+    # Subscribe to the last MQTT broker
+    mosquitto_sub -h $BROKER -t $TOPIC4 | while read -r message; do
+        extraire "$message"
+    done &
 }
 
-recuperation_E208() {
-# S'abonner au topic MQTT et traiter les messages reçus de la salle E101
-mosquitto_sub -h $BROKER -t $TOPIC1 | while read -r message
-do
-    echo "Message reçu : $message"
-    extraire "$message"
-done
-}
+# Call the MQTT subscription function
+mqtt_subscribe
 
-recuperation_B101() {
-# S'abonner au topic MQTT et traiter les messages reçus de la salle B101
-mosquitto_sub -h $BROKER -t $TOPIC2 | while read -r message
-do
-    echo "Message reçu : $message"
-    extraire "$message"
-done
-}
+wait
 
-recuperation_E207() {
-# S'abonner au topic MQTT et traiter les messages reçus de la salle E102
-mosquitto_sub -h $BROKER -t $TOPIC3 | while read -r message
-do
-    echo "Message reçu : $message"
-    extraire "$message"
-done
-}
-
-recuperation_B111() {
-# S'abonner au topic MQTT et traiter les messages reçus de la salle B111
-mosquitto_sub -h $BROKER -t $TOPIC4 | while read -r message
-do
-    echo "Message reçu : $message"
-    extraire "$message"
-done
-}
-
-recuperation_complete
