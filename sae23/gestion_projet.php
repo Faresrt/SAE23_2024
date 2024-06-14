@@ -48,10 +48,11 @@
 		<p> <img src="images/screen-tache-rôle.png" alt="Rôle de projet" ></p>
      </br>
      <h6>Gestionnaire de version du projet Github</h6>
-     <p>Lien vers notre git : <a href="https://github.com/Faresrt/SAE23_2024.git">https://github.com/Faresrt/SAE23_2024</a></p>
-
-  <p>Pour gérer les différentes l'avancement et les différentes versions du projet nous avons utilisé "git", plus spécifiquement "github desktop".</p>
-  <p> <img src="images/git.png" alt="github desktop"></p>
+     <p>Pour gérer les différentes l'avancement et les différentes versions du projet nous avons utilisé "git", plus spécifiquement "github desktop".</p>
+     Lien vers notre git : <a href="https://github.com/Faresrt/SAE23_2024.git" target= "_blank">
+     <img src="images/github.jpg" alt="github desktop" >
+	</a>
+  
 </section>
  <section id="gestion">
     <h1>Développement du projet</h1>
@@ -65,19 +66,16 @@
     <section id="gestion">
       <h1>Chaîne de traitement via des conteneurs Docker</h1>
       <h6>FLOW-NODE-RED:</h6>
-      <img src="images/nodered1.png" alt="flow node red">
-      </br>
-      <h6>Programmation du block function:</h6>
-      <img src="images/noderedconfigchangeJSON.png" alt="block fonction JSON">
+      <img src="images/flownodered.jpg" alt="flow node red">
       </br>
       <h6>Dans Grafana il y a 2 dossiers contenant les graphiques:</h6>
       <img src="images/grafanabat.png" alt="dossiers Batiments">
       </br>
       <h6>Graphique des capteurs du bâtiment Réseaux et télécommunications :</h6>
-      <img src="images/grafanaRT.png" alt="Batiments Réseaux et télécommunications">
+      <img src="images/Grafana-Batiment-RT.png" alt="Batiments Réseaux et télécommunications">
       </br>
       <h6>Graphique des capteurs du bâtiment informatique :</h6>
-      <img src="images/grafanaINFO.png" alt="Batiments informatique">
+      <img src="images/Grafana-Batiment-Informatique.png" alt="Batiments informatique">
       </br>
 </body>
 </html>

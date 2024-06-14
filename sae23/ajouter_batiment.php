@@ -1,30 +1,39 @@
 <!DOCTYPE html>
-
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles/styleMP.css" />
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/styleMP.css">
     <title>Administrateur</title>
-  </head>
-  <body>
-    <nav>
-      <section class="heading">
+</head>
+
+<body>
+
+<?php
+// Fonction pour vérifier si l'administrateur est connecté
+function checkAdminSession() {
+    // Vous pouvez implémenter ici la logique pour vérifier la session de l'administrateur si nécessaire
+}
+
+// Vérifie si l'administrateur est connecté
+checkAdminSession();
+?>
+
+<nav>
+    <section class="heading">
         <h4>SAE23</h4>
-      </section>
-      <ul class="nav-links">
+    </section>
+    <ul class="nav-links">
         <li><a href="intadmin.php">Administrateur</a></li>
         <li><a class="active" href="ajouter_batiment.php">Ajouter</a></li>
-		<li><a href="liste_batiments.php">Supprimer</a></li>
+        <li><a href="liste_batiments.php">Supprimer</a></li>
         <li><a href="modifier_mot_de_passe.php">Modifier</a></li>
-        
-      </ul>
-    </nav>
-	<section id="first" class="centered-text">
+    </ul>
+</nav>
+
+<section id="first" class="centered-text">
     <h2>Ajouter un bâtiment :</h2>
     <form method="post" action="ajouter_batiment_traitement.php">
         <label for="buildingName">Nom :</label>
@@ -38,8 +47,8 @@
 
         <input type="submit" name="addBuilding" value="Ajouter">
     </form>
-	</section>
+</section>
+
 </body>
 
 </html>
-

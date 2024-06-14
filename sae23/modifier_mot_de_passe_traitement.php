@@ -11,30 +11,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dbPassword = "22207448";
     $dbname = "sae23";
 
-    $conn = new mysqli($servername, $dbUsername, $dbPassword, $dbname);
+    // Connexion à la base de données en mode procédural
+    $conn = mysqli_connect($servername, $dbUsername, $dbPassword, $dbname);
 
     // Vérifier la connexion
-    if ($conn->connect_error) {
-        die("Échec de la connexion à la base de données: " . $conn->connect_error);
+    if (!$conn) {
+        die("Échec de la connexion à la base de données: " . mysqli_connect_error());
     }
 
-    // Mettre à jour le mot de passe dans la base de données
+    // Préparer la requête pour mettre à jour le mot de passe
     $query = "UPDATE batiment SET mot_de_passe = ? WHERE login = ?";
-    if ($stmt = $conn->prepare($query)) {
-        $stmt->bind_param("ss", $newPassword, $username);
+    $stmt = mysqli_prepare($conn, $query);
 
-        if ($stmt->execute()) {
+    if ($stmt) {
+        // Binder les paramètres
+        mysqli_stmt_bind_param($stmt, "ss", $newPassword, $username);
+
+        // Exécuter la requête
+        if (mysqli_stmt_execute($stmt)) {
             $_SESSION['messageUser'] = "Le mot de passe de $username a été modifié avec succès.";
         } else {
-            $_SESSION['errorUser'] = "Erreur lors de la modification du mot de passe de $username: " . $stmt->error;
+            $_SESSION['errorUser'] = "Erreur lors de la modification du mot de passe de $username: " . mysqli_stmt_error($stmt);
         }
 
-        $stmt->close();
+        // Fermer la requête préparée
+        mysqli_stmt_close($stmt);
     } else {
-        $_SESSION['errorUser'] = "Erreur de préparation de la requête: " . $conn->error;
+        $_SESSION['errorUser'] = "Erreur de préparation de la requête: " . mysqli_error($conn);
     }
 
-    $conn->close();
+    // Fermer la connexion à la base de données
+    mysqli_close($conn);
 
     // Redirection vers la page de modification
     header("Location: modifier_mot_de_passe.php");

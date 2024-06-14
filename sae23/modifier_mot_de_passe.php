@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles/styleMP.css" />
-    <title>Administrateur</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/styleMP.css">
+    <title>Modifier le mot de passe</title>
 </head>
 <body>
     <nav>
@@ -45,6 +45,7 @@
             die("Échec de la connexion à la base de données: " . $conn->connect_error);
         }
 
+        // Récupérer la liste des utilisateurs (ici, les logins des bâtiments)
         $query = "SELECT login FROM batiment";
         $result = $conn->query($query);
 
@@ -53,7 +54,7 @@
             echo '<label for="username">Choisir l\'utilisateur :</label>';
             echo '<select id="username" name="username" required>';
             while($row = $result->fetch_assoc()) {
-                echo '<option value="' . $row["login"] . '">' . $row["login"] . '</option>';
+                echo '<option value="' . htmlspecialchars($row["login"]) . '">' . htmlspecialchars($row["login"]) . '</option>';
             }
             echo '</select>';
 

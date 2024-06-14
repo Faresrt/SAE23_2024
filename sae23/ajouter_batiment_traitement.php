@@ -12,27 +12,32 @@ if (isset($_POST['buildingName']) && isset($_POST['buildingLogin']) && isset($_P
     $password_db = "22207448";
     $dbname = "sae23";
 
-    // Connexion à la base de données MySQLi
-    $conn = new mysqli($servername, $username, $password_db, $dbname);
+    // Connexion à la base de données MySQLi en mode procédural
+    $conn = mysqli_connect($servername, $username, $password_db, $dbname);
 
     // Vérifier la connexion
-    if ($conn->connect_error) {
-        die("Échec de la connexion à la base de données: " . $conn->connect_error);
+    if (!$conn) {
+        die("Échec de la connexion à la base de données: " . mysqli_connect_error());
     }
 
-    // Insérer le nouveau bâtiment dans la base de données
+    // Échapper les données pour prévenir les injections SQL
+    $buildingName = mysqli_real_escape_string($conn, $buildingName);
+    $buildingLogin = mysqli_real_escape_string($conn, $buildingLogin);
+    $buildingPassword = mysqli_real_escape_string($conn, $buildingPassword);
+
+    // Préparer la requête SQL d'insertion
     $query = "INSERT INTO batiment (nom, login, mot_de_passe) VALUES ('$buildingName', '$buildingLogin', '$buildingPassword')";
 
-    if ($conn->query($query) === TRUE) {
+    // Exécuter la requête et vérifier le succès
+    if (mysqli_query($conn, $query)) {
         echo "Le bâtiment a été ajouté avec succès.";
     } else {
-        echo "Erreur lors de l'ajout du bâtiment: " . $conn->error;
+        echo "Erreur lors de l'ajout du bâtiment: " . mysqli_error($conn);
     }
 
     // Fermer la connexion
-    $conn->close();
+    mysqli_close($conn);
 } else {
     echo "Veuillez remplir tous les champs du formulaire.";
 }
 ?>
-

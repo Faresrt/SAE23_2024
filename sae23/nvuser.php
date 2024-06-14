@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 if (!isset($_SESSION['newUser'])) {
     header("Location: gestion.php");
     exit();
