@@ -20,10 +20,6 @@ if (isset($_POST['buildingName']) && isset($_POST['buildingLogin']) && isset($_P
         die("Échec de la connexion à la base de données: " . mysqli_connect_error());
     }
 
-    // Échapper les données pour prévenir les injections SQL
-    $buildingName = mysqli_real_escape_string($conn, $buildingName);
-    $buildingLogin = mysqli_real_escape_string($conn, $buildingLogin);
-    $buildingPassword = mysqli_real_escape_string($conn, $buildingPassword);
 
     // Préparer la requête SQL d'insertion
     $query = "INSERT INTO batiment (nom, login, mot_de_passe) VALUES ('$buildingName', '$buildingLogin', '$buildingPassword')";
