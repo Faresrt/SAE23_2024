@@ -16,13 +16,10 @@
 <?php
 session_start();
 
-// Function to connect to the database and check the connection information
-
-function checkLogin($login, $mdp) {
-    $host = "localhost";
-    $dbname = "sae23";
-    $username = "root";
-    $password = "22207448";
+$host = "localhost";
+$dbname = "sae23";
+$username = "root";
+$password = "22207448";
 
     try {
         // Connection to Database
@@ -33,11 +30,6 @@ function checkLogin($login, $mdp) {
         if (!$conn) {
             die("Échec de la connexion à la base de données: " . mysqli_connect_error());
          } 
-
-        // Escape values to prevent SQL injections
-
-        $login = mysqli_real_escape_string($conn, $login);
-        $mdp = mysqli_real_escape_string($conn, $mdp);
 
         // Query to check the connection information
 
@@ -69,18 +61,37 @@ function checkLogin($login, $mdp) {
     } catch (Exception $e) {
         echo "Erreur : " . $e->getMessage();
     }
-}
 
-// Check if the login form has been submitted
-
+// Processing the login form
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login = $_POST["login"];
     $mdp = $_POST["mdp"];
-    
-    // Call the function to check the connection information
 
-    checkLogin($login, $mdp);
+    // Query to verify credentials
+    $query = "SELECT * FROM batiment WHERE login = '$login' AND mot_de_passe = '$mdp'";
+    $result = mysqli_query($conn, $query);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        // Checking the manager's name for redirection
+        if ($login == "UserRT" && $mdp == "passRT") {
+            header("Location: gestionE102-103.php");
+            exit();
+        } elseif ($login == "UserINFO" && $mdp == "passINFO") {
+            header("Location: gestionB111-112.php");
+            exit();
+        } else {
+            // Storing the new username in the session
+            $_SESSION['newUser'] = $login;
+            header("Location: nvuser.php");
+            exit();
+        }
+    } else {
+        echo "Login ou mot de passe incorrect.";
+    }
 }
+
+// Close connection
+mysqli_close($conn);
 ?>
 
 <div class="background">
