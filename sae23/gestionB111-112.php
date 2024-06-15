@@ -44,33 +44,27 @@
     </nav>
     <div class="container">
         <?php
-        // Database connection
-
+        // Connexion à la base de données
         $servername = "localhost";
         $username = "root";
         $password = "22207448";
         $dbname = "sae23";
 
-        // Creating the connection
-
+        // Création de la connexion
         $conn = mysqli_connect($servername, $username, $password, $dbname);
 
-        // Check the connection
-        //if (!$conn) {
-        //    die("Échec de la connexion à la base de données: " . mysqli_connect_error());
-        // } A REMPLACER PAR LES LIGNES CI DESSOUS A MON AVIS .
+        // Vérification de la connexion
         if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
+            die("Échec de la connexion à la base de données: " . mysqli_connect_error());
         }
 
-        // Function to retrieve measurement data for a given sensor
-
+        // Récupération des données de mesure pour un capteur donné
         function fetchSensorData($conn, $nom_capteur) {
             $sql = "SELECT date_mesure, horaire, valeur FROM mesure WHERE nom_capteur = '$nom_capteur' ORDER BY date_mesure DESC, horaire DESC LIMIT 10";
             $result = mysqli_query($conn, $sql);
 
             $data = array();
-            if (mysqli_num_rows($result) > 0) {
+            if ($result && mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     $data[] = $row;
                 }
@@ -78,16 +72,13 @@
             return $data;
         }
 
-        // Retrieving data for B111 (AM107-3)
-
+        // Récupération des données pour B111 (AM107-3)
         $dataB111 = fetchSensorData($conn, 'AM107-3');
 
-        // Retrieving data for B112 (AM107-17)
-
+        // Récupération des données pour B112 (AM107-17)
         $dataB112 = fetchSensorData($conn, 'AM107-17');
 
-        // Closing the database connection
-
+        // Fermeture de la connexion à la base de données
         mysqli_close($conn);
         ?>
 
@@ -114,12 +105,16 @@
             <div>
                 <p>Moyenne : <span id="temperatureAverageB111">
                     <?php
-                    $valuesB111 = array_column($dataB111, 'valeur');
-                    echo number_format(array_sum($valuesB111) / count($valuesB111), 2);
+                    if (!empty($dataB111)) {
+                        $valuesB111 = array_column($dataB111, 'valeur');
+                        echo number_format(array_sum($valuesB111) / count($valuesB111), 2);
+                    } else {
+                        echo "N/A";
+                    }
                     ?>
                 </span></p>
-                <p>Min : <span id="temperatureMinB111"><?php echo min($valuesB111); ?></span></p>
-                <p>Max : <span id="temperatureMaxB111"><?php echo max($valuesB111); ?></span></p>
+                <p>Min : <span id="temperatureMinB111"><?php echo !empty($dataB111) ? min($valuesB111) : "N/A"; ?></span></p>
+                <p>Max : <span id="temperatureMaxB111"><?php echo !empty($dataB111) ? max($valuesB111) : "N/A"; ?></span></p>
             </div>
         </div>
 
@@ -146,12 +141,16 @@
             <div>
                 <p>Moyenne : <span id="temperatureAverageB112">
                     <?php
-                    $valuesB112 = array_column($dataB112, 'valeur');
-                    echo number_format(array_sum($valuesB112) / count($valuesB112), 2);
+                    if (!empty($dataB112)) {
+                        $valuesB112 = array_column($dataB112, 'valeur');
+                        echo number_format(array_sum($valuesB112) / count($valuesB112), 2);
+                    } else {
+                        echo "N/A";
+                    }
                     ?>
                 </span></p>
-                <p>Min : <span id="temperatureMinB112"><?php echo min($valuesB112); ?></span></p>
-                <p>Max : <span id="temperatureMaxB112"><?php echo max($valuesB112); ?></span></p>
+                <p>Min : <span id="temperatureMinB112"><?php echo !empty($dataB112) ? min($valuesB112) : "N/A"; ?></span></p>
+                <p>Max : <span id="temperatureMaxB112"><?php echo !empty($dataB112) ? max($valuesB112) : "N/A"; ?></span></p>
             </div>
         </div>
     </div>
@@ -165,20 +164,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // PHP data converted to JavaScript
-
+        // Données PHP converties en JavaScript
         const dataB111 = <?php echo json_encode($dataB111); ?>;
         const dataB112 = <?php echo json_encode($dataB112); ?>;
 
-        // Extracting values and dates for the chart
-
-        const temperatureDataB111 = dataB111.map(item => item.valeur);
-        const temperatureDataB112 = dataB112.map(item => item.valeur);
+        // Extraction des valeurs et dates pour le graphique
+        const temperatureDataB111 = dataB111.map(item => parseFloat(item.valeur));
+        const temperatureDataB112 = dataB112.map(item => parseFloat(item.valeur));
         const labelsB111 = dataB111.map(item => `${item.date_mesure} ${item.horaire}`);
         const labelsB112 = dataB112.map(item => `${item.date_mesure} ${item.horaire}`);
 
-        // Creating the chart
-
+        // Création du graphique
         const ctx = document.getElementById('temperatureChart').getContext('2d');
         const temperatureChart = new Chart(ctx, {
             type: 'line',
