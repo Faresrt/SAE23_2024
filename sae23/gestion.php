@@ -16,73 +16,53 @@
 <?php
 session_start();
 
-// Function to connect to the database and check the connection information
+$host = "localhost";
+$dbname = "sae23";
+$username = "root";
+$password = "22207448";
 
-function checkLogin($login, $mdp) {
-    $host = "localhost";
-    $dbname = "sae23";
-    $username = "root";
-    $password = "22207448";
+// Connexion à la base de données en mode procédural
+$conn = mysqli_connect($host, $username, $password, $dbname);
 
-    try {
-        // Connection to Database
-        $conn = mysqli_connect($host, $username, $password, $dbname);
-
-        //if (!$conn) {
-        //    die("Échec de la connexion à la base de données: " . mysqli_connect_error());
-        // } REMPLACER LES LIGNES CI DESSOUS PAR CELLE CI JE PENSE. 
-        //Check the connection
-        if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-
-        // Escape values to prevent SQL injections
-
-        $login = mysqli_real_escape_string($conn, $login);
-        $mdp = mysqli_real_escape_string($conn, $mdp);
-
-        // Query to check the connection information
-
-        $query = "SELECT * FROM batiment WHERE login = '$login' AND mot_de_passe = '$mdp'";
-        $result = mysqli_query($conn, $query);
-
-        if (mysqli_num_rows($result) > 0) {
-            // Check the manager's name to redirect to the correct page
-
-            if ($login == "UserRT" && $mdp == "passRT") {
-                header("Location: gestionE102-103.php");
-                exit();
-            } elseif ($login == "UserINFO" && $mdp == "passINFO") {
-                header("Location: gestionB111-112.php");
-                exit();
-            } else {
-                //Store the new user's name in the session
-
-                $_SESSION['newUser'] = $login;
-                header("Location: nvuser.php");
-                exit();
-            }
-        } else {
-            echo "Login ou mot de passe incorrect.";
-        }
-
-        mysqli_close($conn);
-        // ORIENTE OBJET A ENLEVER
-    } catch (Exception $e) {
-        echo "Erreur : " . $e->getMessage();
-    }
+// Vérification de la connexion
+if (!$conn) {
+    die("Échec de la connexion à la base de données: " . mysqli_connect_error());
 }
 
-// Check if the login form has been submitted
-
+// Traitement du formulaire de connexion
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login = $_POST["login"];
     $mdp = $_POST["mdp"];
-    
-    // Call the function to check the connection information
 
-    checkLogin($login, $mdp);
+    // Échappement des caractères spéciaux pour éviter les injections SQL
+    $login = mysqli_real_escape_string($conn, $login);
+    $mdp = mysqli_real_escape_string($conn, $mdp);
+
+    // Requête pour vérifier les identifiants
+    $query = "SELECT * FROM batiment WHERE login = '$login' AND mot_de_passe = '$mdp'";
+    $result = mysqli_query($conn, $query);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        // Vérification du nom du gestionnaire pour redirection
+        if ($login == "UserRT" && $mdp == "passRT") {
+            header("Location: gestionE102-103.php");
+            exit();
+        } elseif ($login == "UserINFO" && $mdp == "passINFO") {
+            header("Location: gestionB111-112.php");
+            exit();
+        } else {
+            // Stocker le nouveau nom d'utilisateur dans la session
+            $_SESSION['newUser'] = $login;
+            header("Location: nvuser.php");
+            exit();
+        }
+    } else {
+        echo "Login ou mot de passe incorrect.";
+    }
 }
+
+// Fermeture de la connexion à la base de données
+mysqli_close($conn);
 ?>
 
 <div class="background">
