@@ -39,13 +39,12 @@
         $dbname = "sae23";
 
         $conn = mysqli_connect($servername, $username, $password_db, $dbname);
-        // if (!$conn) {
-        //die("Échec de la connexion à la base de données: " . mysqli_connect_error());
-    // } A REMPLACER PAR LES LIGNES CI DESSOUS A MON AVIS.
+        
         // Check the connection
-        if ($conn->connect_error) {
-            die("Échec de la connexion à la base de données: " . $conn->connect_error);
-        }
+        if (!$conn) {
+            die("Échec de la connexion à la base de données: " . mysqli_connect_error());
+        } 
+        
 
         // Retrieve the list of users (here, the logins of the buildings) ORIENTE OBJET
         $query = "SELECT login FROM batiment";

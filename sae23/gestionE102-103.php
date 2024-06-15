@@ -55,13 +55,11 @@
 
         $conn = mysqli_connect($servername, $username, $password, $dbname);
 
-        // if (!$conn) {
-        //die("Échec de la connexion à la base de données: " . mysqli_connect_error());
-    // } A REMPLACER PAR LES LIGNES CI DESSOUS A MON AVIS.
+         
         //Check the connection
         if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
+            die("Échec de la connexion à la base de données: " . mysqli_connect_error());
+         } 
 
         // Function to retrieve measurement data for a given sensor
 

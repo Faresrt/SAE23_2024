@@ -28,13 +28,11 @@ function checkLogin($login, $mdp) {
         // Connection to Database
         $conn = mysqli_connect($host, $username, $password, $dbname);
 
-        //if (!$conn) {
-        //    die("Échec de la connexion à la base de données: " . mysqli_connect_error());
-        // } REMPLACER LES LIGNES CI DESSOUS PAR CELLE CI JE PENSE. 
+        
         //Check the connection
         if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
+            die("Échec de la connexion à la base de données: " . mysqli_connect_error());
+         } 
 
         // Escape values to prevent SQL injections
 

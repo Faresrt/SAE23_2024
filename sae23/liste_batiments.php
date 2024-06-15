@@ -33,12 +33,10 @@
         $conn = mysqli_connect($servername, $username, $password_db, $dbname);
 
         // Check the connection
-        // if (!$conn) {
-        //die("Échec de la connexion à la base de données: " . mysqli_connect_error());
-    // } A REMPLACER PAR LES LIGNES CI DESSOUS A MON AVIS.
-        if ($conn->connect_error) {
-            die("Échec de la connexion à la base de données: " . $conn->connect_error);
-        }
+        
+        if (!$conn) {
+            die("Échec de la connexion à la base de données: " . mysqli_connect_error());
+         }
 
         // Delete the building if an ID is provided
 
