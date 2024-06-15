@@ -34,10 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login = $_POST["login"];
     $mdp = $_POST["mdp"];
 
-    // Échappement des caractères spéciaux pour éviter les injections SQL
-    $login = mysqli_real_escape_string($conn, $login);
-    $mdp = mysqli_real_escape_string($conn, $mdp);
-
+   
     // Requête pour vérifier les identifiants
     $query = "SELECT * FROM batiment WHERE login = '$login' AND mot_de_passe = '$mdp'";
     $result = mysqli_query($conn, $query);
