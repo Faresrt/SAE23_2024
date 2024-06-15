@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -12,12 +12,12 @@
 <body>
 
 <?php
-// Fonction pour vérifier si l'administrateur est connecté
+// Function to check if the administrator is logged in.
 function checkAdminSession() {
-    // Vous pouvez implémenter ici la logique pour vérifier la session de l'administrateur si nécessaire
+    // You can implement the logic here to check the administrator's session if necessary.
 }
 
-// Vérifie si l'administrateur est connecté
+// Check if the administrator is logged in.
 checkAdminSession();
 ?>
 

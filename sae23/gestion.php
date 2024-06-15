@@ -16,7 +16,8 @@
 <?php
 session_start();
 
-// Fonction pour se connecter à la base de données et vérifier les informations de connexion
+// Function to connect to the database and check the connection information
+
 function checkLogin($login, $mdp) {
     $host = "localhost";
     $dbname = "sae23";
@@ -24,23 +25,30 @@ function checkLogin($login, $mdp) {
     $password = "22207448";
 
     try {
-        // Connexion à la base de données
+        // Connection to Database
         $conn = mysqli_connect($host, $username, $password, $dbname);
 
+        //if (!$conn) {
+        //    die("Échec de la connexion à la base de données: " . mysqli_connect_error());
+        // } REMPLACER LES LIGNES CI DESSOUS PAR CELLE CI JE PENSE. 
+        //Check the connection
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
         }
 
-        // Échapper les valeurs pour éviter les injections SQL
+        // Escape values to prevent SQL injections
+
         $login = mysqli_real_escape_string($conn, $login);
         $mdp = mysqli_real_escape_string($conn, $mdp);
 
-        // Requête pour vérifier les informations de connexion
+        // Query to check the connection information
+
         $query = "SELECT * FROM batiment WHERE login = '$login' AND mot_de_passe = '$mdp'";
         $result = mysqli_query($conn, $query);
 
         if (mysqli_num_rows($result) > 0) {
-            // Vérifier le nom du gestionnaire pour rediriger vers la bonne page
+            // Check the manager's name to redirect to the correct page
+
             if ($login == "UserRT" && $mdp == "passRT") {
                 header("Location: gestionE102-103.php");
                 exit();
@@ -48,7 +56,8 @@ function checkLogin($login, $mdp) {
                 header("Location: gestionB111-112.php");
                 exit();
             } else {
-                // Stocker le nom du nouvel utilisateur dans la session
+                //Store the new user's name in the session
+
                 $_SESSION['newUser'] = $login;
                 header("Location: nvuser.php");
                 exit();
@@ -58,17 +67,20 @@ function checkLogin($login, $mdp) {
         }
 
         mysqli_close($conn);
+        // ORIENTE OBJET A ENLEVER
     } catch (Exception $e) {
         echo "Erreur : " . $e->getMessage();
     }
 }
 
-// Vérifier si le formulaire de connexion a été soumis
+// Check if the login form has been submitted
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login = $_POST["login"];
     $mdp = $_POST["mdp"];
     
-    // Appeler la fonction pour vérifier les informations de connexion
+    // Call the function to check the connection information
+
     checkLogin($login, $mdp);
 }
 ?>

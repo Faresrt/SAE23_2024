@@ -44,21 +44,27 @@
     </nav>
     <div class="container">
         <?php
-        // Connexion à la base de données
+        // Database connection
+
         $servername = "localhost";
         $username = "root";
         $password = "22207448";
         $dbname = "sae23";
 
-        // Création de la connexion
+        // Creating the connection
+
         $conn = mysqli_connect($servername, $username, $password, $dbname);
 
-        // Vérification de la connexion
+        // Check the connection
+        //if (!$conn) {
+        //    die("Échec de la connexion à la base de données: " . mysqli_connect_error());
+        // } A REMPLACER PAR LES LIGNES CI DESSOUS A MON AVIS .
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
         }
 
-        // Fonction pour récupérer les données de mesure pour un capteur donné
+        // Function to retrieve measurement data for a given sensor
+
         function fetchSensorData($conn, $nom_capteur) {
             $sql = "SELECT date_mesure, horaire, valeur FROM mesure WHERE nom_capteur = '$nom_capteur' ORDER BY date_mesure DESC, horaire DESC LIMIT 10";
             $result = mysqli_query($conn, $sql);
@@ -72,13 +78,16 @@
             return $data;
         }
 
-        // Récupération des données pour B111 (AM107-3)
+        // Retrieving data for B111 (AM107-3)
+
         $dataB111 = fetchSensorData($conn, 'AM107-3');
 
-        // Récupération des données pour B112 (AM107-17)
+        // Retrieving data for B112 (AM107-17)
+
         $dataB112 = fetchSensorData($conn, 'AM107-17');
 
-        // Fermeture de la connexion à la base de données
+        // Closing the database connection
+
         mysqli_close($conn);
         ?>
 
@@ -156,17 +165,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Données PHP converties en JavaScript
+        // PHP data converted to JavaScript
+
         const dataB111 = <?php echo json_encode($dataB111); ?>;
         const dataB112 = <?php echo json_encode($dataB112); ?>;
 
-        // Extraction des valeurs et dates pour le graphique
+        // Extracting values and dates for the chart
+
         const temperatureDataB111 = dataB111.map(item => item.valeur);
         const temperatureDataB112 = dataB112.map(item => item.valeur);
         const labelsB111 = dataB111.map(item => `${item.date_mesure} ${item.horaire}`);
         const labelsB112 = dataB112.map(item => `${item.date_mesure} ${item.horaire}`);
 
-        // Création du graphique
+        // Creating the chart
+
         const ctx = document.getElementById('temperatureChart').getContext('2d');
         const temperatureChart = new Chart(ctx, {
             type: 'line',

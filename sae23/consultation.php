@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -12,24 +12,28 @@
 <body>
 
 <?php
-// Fonction pour se connecter à la base de données et récupérer les dernières valeurs des capteurs
+// Function to connect to the database and retrieve the latest sensor values
 function fetchLastSensorValues() {
-    // Informations de connexion à la base de données
+    // Database connection information
     $host = "localhost";
     $dbname = "sae23";
     $username = "root";
     $password = "22207448";
 
-    // Connexion à la base de données
+    // Database connection
     $conn = mysqli_connect($host, $username, $password, $dbname);
-
+     
+    //if (!$conn) {
+        //die("Échec de la connexion à la base de données: " . mysqli_connect_error());
+    //} REMPLACER LES LIGNES ci dessous par celle ci je pense
+    //Check the connection
     if (!$conn) {
         echo "<p>Erreur : " . mysqli_connect_error() . "</p>";
         return false;
     }
 
-    // Requête pour récupérer les dernières valeurs des capteurs de température pour les salles spécifiées
-    $query = "
+// Query to retrieve the latest temperature sensor values for the specified rooms
+$query = "
         SELECT s.nom AS nom_salle, c.nom_capteur, m.valeur, m.date_mesure, m.horaire
         FROM mesure m
         JOIN capteur c ON m.nom_capteur = c.nom_capteur
@@ -39,38 +43,44 @@ function fetchLastSensorValues() {
         ORDER BY m.date_mesure DESC, m.horaire DESC
     ";
 
-    // Tableau pour stocker les dernières valeurs par capteur
+    // Array to store the latest values per sensor
+
     $last_values = array();
 
     $result = mysqli_query($conn, $query);
 
     if ($result) {
-        // Parcourir les résultats et récupérer uniquement la dernière valeur par capteur
+        // Loop through the results and retrieve only the latest value per sensor
+
         while ($row = mysqli_fetch_assoc($result)) {
             $capteur = $row['nom_capteur'];
 
-            // Si le capteur n'est pas encore dans le tableau, ajouter sa valeur
+            // If the sensor is not yet in the array, add its value
+
             if (!isset($last_values[$capteur])) {
                 $last_values[$capteur] = $row;
             }
         }
 
-        // Fermer la requête
+        // Close the query
+
         mysqli_free_result($result);
     } else {
         echo "<p>Erreur : " . mysqli_error($conn) . "</p>";
     }
 
-    // Fermer la connexion
+    // Close connection
     mysqli_close($conn);
 
     return $last_values;
 }
 
-// Récupérer les dernières valeurs des capteurs
+// Retrieve the latest sensor values
+
 $last_values = fetchLastSensorValues();
 
-// Afficher les résultats dans le HTML
+// Display the results in HTML
+
 ?>
 <nav>
     <section class="heading">

@@ -23,24 +23,26 @@
         <h1>Liste des bâtiments</h1>
 
         <?php
-        // Connexion à la base de données
+        // Connection to the database
         $servername = "localhost";
         $username = "root";
         $password_db = "22207448";
         $dbname = "sae23";
 
-        $conn = new mysqli($servername, $username, $password_db, $dbname);
-
-        // Vérifier la connexion
+        $conn = mysqli_connect($servername, $username, $password_db, $dbname);
+        // if (!$conn) {
+        //die("Échec de la connexion à la base de données: " . mysqli_connect_error());
+    // } A REMPLACER PAR LES LIGNES CI DESSOUS A MON AVIS.
+        // Check the connection
         if ($conn->connect_error) {
             die("Échec de la connexion à la base de données: " . $conn->connect_error);
         }
 
-        // Supprimer le bâtiment si un ID est fourni
+        // Delete the building if an ID is provided
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['buildingID'])) {
             $buildingID = $_POST['buildingID'];
             $query = "DELETE FROM batiment WHERE id_batiment = $buildingID";
-
+            // ORIENTE OBJET
             if ($conn->query($query) === TRUE) {
                 echo "<p class='success'>Le bâtiment a été supprimé avec succès.</p>";
             } else {
@@ -48,13 +50,14 @@
             }
         }
 
-        // Requête pour récupérer les bâtiments
+        // Query to retrieve the buildings ORIENTE OBJET A ENLEVER
         $query = "SELECT * FROM batiment";
         $result = $conn->query($query);
-
+        //ORIENTE OBJET
         if ($result->num_rows > 0) {
             echo "<table>";
             echo "<tr><th>ID</th><th>Nom</th><th>Login</th><th>Mot de passe</th><th>Supprimer</th></tr>";
+            //ORIENTE OBJET
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
                 echo "<td>" . $row['id_batiment'] . "</td>";
@@ -74,7 +77,8 @@
             echo "<p>Aucun bâtiment trouvé.</p>";
         }
 
-        $conn->close();
+        // Close connection
+    mysqli_close($conn);
         ?>
     </section>
 </body>

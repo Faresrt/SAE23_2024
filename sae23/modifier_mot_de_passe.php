@@ -32,27 +32,30 @@
             unset($_SESSION['errorUser']);
         }
         
-        // Connexion à la base de données
+        // Database connection
         $servername = "localhost";
         $dbUsername = "root";
         $dbPassword = "22207448";
         $dbname = "sae23";
 
-        $conn = new mysqli($servername, $dbUsername, $dbPassword, $dbname);
-
-        // Vérifier la connexion
+        $conn = mysqli_connect($servername, $username, $password_db, $dbname);
+        // if (!$conn) {
+        //die("Échec de la connexion à la base de données: " . mysqli_connect_error());
+    // } A REMPLACER PAR LES LIGNES CI DESSOUS A MON AVIS.
+        // Check the connection
         if ($conn->connect_error) {
             die("Échec de la connexion à la base de données: " . $conn->connect_error);
         }
 
-        // Récupérer la liste des utilisateurs (ici, les logins des bâtiments)
+        // Retrieve the list of users (here, the logins of the buildings) ORIENTE OBJET
         $query = "SELECT login FROM batiment";
         $result = $conn->query($query);
-
+        // ORIENTE OBJET
         if ($result->num_rows > 0) {
             echo '<form method="post" action="modifier_mot_de_passe_traitement.php">';
             echo '<label for="username">Choisir l\'utilisateur :</label>';
             echo '<select id="username" name="username" required>';
+            //ORIENTE OBJET
             while($row = $result->fetch_assoc()) {
                 echo '<option value="' . htmlspecialchars($row["login"]) . '">' . htmlspecialchars($row["login"]) . '</option>';
             }
@@ -67,7 +70,8 @@
             echo "<p>Aucun utilisateur trouvé.</p>";
         }
 
-        $conn->close();
+        // Close connection
+    mysqli_close($conn);
         ?>
     </section>
 </body>

@@ -20,10 +20,10 @@ unset($_SESSION['newUser']);
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <title>Bienvenue</title>
     <style>
-        /* Ajoutez ces styles pour le débogage */
+        /* Add these styles for debugging */
         body {
-            background-color: #f0f0f0; /* Changez la couleur d'arrière-plan pour voir si c'est le CSS qui pose problème */
-            color: #333; /* Assurez-vous que le texte est visible */
+            background-color: #f0f0f0; 
+            color: #333; 
             font-family: 'Poppins', sans-serif;
         }
         .centered-text {
