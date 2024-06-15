@@ -15,30 +15,26 @@ $username = "root";
 $password_db = "22207448";
 $dbname = "sae23";
 
-// Connexion à la base de données en mode procédural
+// Databse connection
 $conn = mysqli_connect($servername, $username, $password_db, $dbname);
 
-// Vérification de la connexion
+// Check connection
 if (!$conn) {
     die("Échec de la connexion à la base de données: " . mysqli_connect_error());
 }
 
-// Traitement du formulaire de connexion
+// Handling the login form
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['login']) && isset($_POST['password'])) {
         $login = $_POST['login'];
         $password = $_POST['password'];
 
-        // Échappement des caractères spéciaux pour éviter les injections SQL
-        $login = mysqli_real_escape_string($conn, $login);
-        $password = mysqli_real_escape_string($conn, $password);
-
-        // Requête pour vérifier les identifiants
+        // Query to check credentials
         $query = "SELECT * FROM administration WHERE login = '$login' AND mot_de_passe = '$password'";
         $result = mysqli_query($conn, $query);
 
         if ($result && mysqli_num_rows($result) > 0) {
-            // Redirection vers une autre page après connexion réussie
+            // Redirecting to another page after successful login
             header("Location: intadmin.php");
             exit();
         } else {
@@ -47,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Fermeture de la connexion à la base de données
+// Closing the database connection
 mysqli_close($conn);
 ?>
 
