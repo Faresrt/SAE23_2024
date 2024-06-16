@@ -1,0 +1,183 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+.body-text {  
+  display: flex;
+  font-family: "Montserrat", sans-serif;  
+  align-items: center;
+  justify-content: center;
+  margin-top: 250px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 8vh;
+  background-color: teal;
+  font-family: "Montserrat", sans-serif;
+}
+
+.heading {
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  font-size: 20px;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-around;
+  width: 30%;
+}
+
+.nav-links li {
+  list-style: none;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  letter-spacing: 3px;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 14px 16px;
+}
+
+.nav-links a:hover:not(.active) {
+  background-color: lightseagreen;
+}
+
+.nav-links li a.active {
+  background-color: #4caf50;
+}
+
+section#first {
+  text-align: center;
+  padding: 50px 0;
+}
+
+section#first h1 {
+  font-size: 32px;
+  margin: 0;
+}
+
+section#gestion {
+  padding: 50px;
+}
+
+section#gestion h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+section#gestion p {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+section#gestion h6 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+section#gestion img {
+  max-width: 100%;
+  margin-top: 20px;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+  color: #333;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+td {
+  background-color: #fff;
+  color: #333;
+  font-size: 16px;
+}
+
+@media screen and (max-width: 600px) {
+  nav .heading h4 {
+    font-size: 20px;
+  }
+
+  nav ul.nav-links li a {
+    font-size: 14px;
+  }
+
+  section#first h1 {
+    font-size: 24px;
+  }
+
+  section#gestion h1 {
+    font-size: 20px;
+  }
+
+  section#gestion p {
+    font-size: 16px;
+  }
+
+  section#gestion h6 {
+    font-size: 18px;
+  }
+
+  /* Table styles for mobile */
+  th, td {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+td a {
+  color: teal;
+  text-decoration: none;
+}
+
+td a:hover {
+  text-decoration: underline;
+}
+
+#advanced h2 {
+  text-align: center;
+  margin-top: 40px;
+}
